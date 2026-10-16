@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Contact · Golden Crumb{% endblock %}
+{% block content %}
+<section class="section contact">
+  <div class="contact-info glass reveal">
+    <p class="eyebrow">Say hello</p>
+    <h2>Custom cakes & questions</h2>
+    <p class="lead">Planning a wedding, birthday or office party? Tell us about it and we'll design something special.</p>
+    <ul class="info-list">
+      <li>📍 42 Honeycomb Lane</li>
+      <li>📞 (555) 012-3456</li>
+      <li>✉️ hello@goldencrumb.example</li>
+      <li>🕗 Tue–Sun · 8am–7pm</li>
+    </ul>
+  </div>
+  <form class="checkout glass reveal" method="post">
+    <label>Name<input name="name" value="{{ form.get('name', '') }}" required></label>
+    <label>Email<input name="email" type="email" value="{{ form.get('email', '') }}" required></label>
+    <label>Message<textarea name="message" rows="5" required>{{ form.get('message', '') }}</textarea></label>
+    <button class="btn btn-block" type="submit">Send message</button>
+  </form>
+</section>
+{% endblock %}

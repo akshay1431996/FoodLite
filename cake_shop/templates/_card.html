@@ -1,0 +1,15 @@
+<article class="card glass reveal">
+  {% if cake.badge %}<span class="ribbon">{{ cake.badge }}</span>{% endif %}
+  <a href="{{ url_for('cake_detail', slug=cake.slug) }}" class="card-art"><span>{{ cake.emoji }}</span></a>
+  <div class="card-body">
+    <p class="eyebrow">{{ cake.category }} · ★ {{ cake.rating }}</p>
+    <h3><a href="{{ url_for('cake_detail', slug=cake.slug) }}">{{ cake.name }}</a></h3>
+    <p class="muted">{{ cake.tagline }}</p>
+    <div class="card-foot">
+      <span class="price">{{ cake.price|money }}</span>
+      <form method="post" action="{{ url_for('cart_add', slug=cake.slug) }}">
+        <button class="btn btn-sm" type="submit">Add +</button>
+      </form>
+    </div>
+  </div>
+</article>

@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Not found · Golden Crumb{% endblock %}
+{% block content %}
+<section class="section">
+  <div class="empty glass">
+    <span>🥄</span>
+    <h2>This page got eaten.</h2>
+    <a class="btn" href="{{ url_for('menu') }}">See the menu</a>
+  </div>
+</section>
+{% endblock %}

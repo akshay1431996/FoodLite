@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Order placed · Golden Crumb{% endblock %}
+{% block content %}
+<section class="section">
+  <div class="empty glass reveal">
+    <span>🎉</span>
+    <h2>Thank you, {{ name }}!</h2>
+    <p class="muted">Your order is confirmed for pickup on <strong>{{ pickup }}</strong>.</p>
+    <ul class="summary">
+      {% for item in items %}<li><span>{{ item.qty }} × {{ item.cake.name }}</span><span>{{ item.line_total|money }}</span></li>{% endfor %}
+      <li class="summary-total"><span>Total</span><span>{{ total|money }}</span></li>
+    </ul>
+    <a class="btn" href="{{ url_for('index') }}">Back home</a>
+  </div>
+</section>
+{% endblock %}

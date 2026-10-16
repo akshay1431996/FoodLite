@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Menu · Golden Crumb{% endblock %}
+{% block content %}
+<section class="section">
+  <div class="section-head">
+    <p class="eyebrow">Our menu</p>
+    <h2>Pick your perfect cake</h2>
+  </div>
+  <div class="filters glass">
+    {% for c in categories %}
+      <a href="{{ url_for('menu', category=c) }}" class="pill {{ 'active' if c == active }}">{{ c }}</a>
+    {% endfor %}
+  </div>
+  <div class="grid">
+    {% for cake in cakes %}{% include "_card.html" %}{% endfor %}
+  </div>
+</section>
+{% endblock %}

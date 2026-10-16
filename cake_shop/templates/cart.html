@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Your box · Golden Crumb{% endblock %}
+{% block content %}
+<section class="section">
+  <div class="section-head">
+    <p class="eyebrow">Checkout</p>
+    <h2>Your cake box</h2>
+  </div>
+  {% if items %}
+  <div class="cart-layout">
+    <div class="cart-list glass">
+      {% for item in items %}
+      <div class="cart-row">
+        <span class="cart-emoji">{{ item.cake.emoji }}</span>
+        <div class="cart-name">
+          <a href="{{ url_for('cake_detail', slug=item.cake.slug) }}">{{ item.cake.name }}</a>
+          <span class="muted">{{ item.cake.price|money }} each</span>
+        </div>
+        <form method="post" action="{{ url_for('cart_update', slug=item.cake.slug) }}" class="cart-qty">
+          <input type="number" name="qty" value="{{ item.qty }}" min="0" max="20" aria-label="Quantity" onchange="this.form.submit()">
+        </form>
+        <span class="price">{{ item.line_total|money }}</span>
+        <form method="post" action="{{ url_for('cart_update', slug=item.cake.slug) }}">
+          <input type="hidden" name="qty" value="0">
+          <button class="icon-btn" aria-label="Remove">✕</button>
+        </form>
+      </div>
+      {% endfor %}
+      <div class="cart-total"><span>Total</span><span class="price big">{{ total|money }}</span></div>
+    </div>
+    <form class="checkout glass" method="post" action="{{ url_for('checkout') }}">
+      <h3>Pickup details</h3>
+      <label>Name<input name="name" required></label>
+      <label>Email<input name="email" type="email" required></label>
+      <label>Pickup date<input name="pickup" type="date" required></label>
+      <button class="btn btn-block" type="submit">Place order · {{ total|money }}</button>
+      <p class="muted small">Pay in store at pickup.</p>
+    </form>
+  </div>
+  {% else %}
+  <div class="empty glass">
+    <span>🧺</span>
+    <p>Your box is empty — let's fix that.</p>
+    <a class="btn" href="{{ url_for('menu') }}">Browse cakes</a>
+  </div>
+  {% endif %}
+</section>
+{% endblock %}
