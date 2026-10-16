@@ -2,6 +2,7 @@
 
 import os
 import re
+from datetime import date
 
 from flask import Flask, abort, flash, redirect, render_template, request, session, url_for
 
@@ -84,7 +85,7 @@ def cart_update(slug):
 @app.route("/cart")
 def cart():
     items, total = cart_items()
-    return render_template("cart.html", items=items, total=total)
+    return render_template("cart.html", items=items, total=total, today=date.today().isoformat())
 
 
 @app.post("/checkout")
@@ -96,13 +97,17 @@ def checkout():
 
     name = request.form.get("name", "").strip()
     email = request.form.get("email", "").strip()
-    pickup = request.form.get("pickup", "").strip()
-    if not name or not EMAIL_RE.match(email) or not pickup:
-        flash("Please enter your name, a valid email and a pickup date.", "error")
+    try:
+        pickup = date.fromisoformat(request.form.get("pickup", "").strip())
+    except ValueError:
+        pickup = None
+    if not name or not EMAIL_RE.match(email) or not pickup or pickup < date.today():
+        flash("Please enter your name, a valid email and a pickup date from today on.", "error")
         return redirect(url_for("cart"))
 
     session.pop("cart", None)
-    return render_template("success.html", name=name, items=items, total=total, pickup=pickup)
+    pickup_label = f"{pickup:%A, %B} {pickup.day}, {pickup.year}"
+    return render_template("success.html", name=name, items=items, total=total, pickup=pickup_label)
 
 
 @app.route("/contact", methods=["GET", "POST"])

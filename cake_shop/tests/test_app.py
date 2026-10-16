@@ -1,6 +1,8 @@
 import sys
 from pathlib import Path
 
+from datetime import date, timedelta
+
 import pytest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
@@ -37,8 +39,15 @@ def test_checkout(client):
     bad = client.post("/checkout", data={"name": "A", "email": "bad", "pickup": "2026-10-20"})
     assert bad.status_code == 302
 
-    ok = client.post("/checkout", data={"name": "Ana", "email": "a@b.co", "pickup": "2026-10-20"})
-    assert "Thank you, Ana!" in ok.get_data(as_text=True)
+    past = (date.today() - timedelta(days=1)).isoformat()
+    assert client.post("/checkout", data={"name": "Ana", "email": "a@b.co", "pickup": past}).status_code == 302
+    assert client.post("/checkout", data={"name": "Ana", "email": "a@b.co", "pickup": "not-a-date"}).status_code == 302
+
+    pickup = date.today() + timedelta(days=3)
+    ok = client.post("/checkout", data={"name": "Ana", "email": "a@b.co", "pickup": pickup.isoformat()})
+    body = ok.get_data(as_text=True)
+    assert "Thank you, Ana!" in body
+    assert f"{pickup:%B} {pickup.day}, {pickup.year}" in body
     assert "Your box is empty" in client.get("/cart").get_data(as_text=True)
 
 
